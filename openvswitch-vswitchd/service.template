@@ -1,0 +1,20 @@
+[Unit]
+Description=Open vSwitch Forwarding Unit
+After=ovsdb-server.service network-pre.target systemd-udev-settle.service
+Before=network.target network.service
+Requires=ovsdb-server.service
+ReloadPropagatedFrom=ovsdb-server.service
+AssertPathIsReadWrite=/var/run/openvswitch/db.sock
+
+[Service]
+EnvironmentFile=/etc/sysconfig/openvswitch
+ExecStartPre=/bin/bash -c 'export -p > /run/$NAME-env'
+ExecStart=$EXEC_START
+ExecStop=$EXEC_STOP
+SyslogIdentifier=$NAME
+Restart=always
+Type=notify
+NotifyAccess=all
+WorkingDirectory=$DESTDIR
+RuntimeDirectory=openvswitch
+

@@ -1,0 +1,17 @@
+[Unit]
+Description=Open vSwitch Database Unit
+After=syslog.target network-pre.target
+Before=network.target network.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/openvswitch
+ExecStartPre=/bin/bash -c 'export -p > /run/$NAME-env'
+ExecStart=$EXEC_START
+ExecStop=$EXEC_STOP
+SyslogIdentifier=$NAME
+Restart=always
+Type=notify
+NotifyAccess=all
+WorkingDirectory=$DESTDIR
+RuntimeDirectory=openvswitch
+
